@@ -2,10 +2,10 @@
 <link rel="icon" href="./icon.png">
 <link rel="apple-touch-icon" href="./icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>IT辞書 - 情報科全教科書用語リスト</title>
+<title>DPC辞書 - 診断群分類(DPC)リスト</title>
 <body>
 <div id=divin>
-<input type=text id=intext><span class=title>IT辞書</span>
+<input type=text id=intext><span class=title>DPC辞書</span>
 </div>
 <div id=divresult></div>
 <div id=btnc>
@@ -14,10 +14,10 @@
 
 <footer>
 <a id=credit></a>
-<h1>IT辞書</h1>
-DATA: CC 4.0 BY-SA <a href=https://sites.google.com/a.ipsj.or.jp/ipsjjn/wordlist>情報処理学会 情報入試委員会 - 情報科全教科書用語リスト</a><br>
-forked from: <a href=https://github.com/code4fukui/MJdic>MJ典</a>, <a href=https://github.com/code4fukui/CEdic>CE典</a><br>
-app: MIT <a href=https://github.com/code4fukui/ipsj-words>src on GitHub</a> (<a href=https://fukuno.jig.jp/4283>blog 一日一創</a>)<br>
+<h1>DPC辞書</h1>
+DATA: <a href=https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000198757_00008.html> 診断群分類（DPC）電子点数表（正式版）（令和６年５月21日更新） - 厚生労働省</a><br>
+forked from: <a href=https://github.com/code4fukui/ipsj-words>IT辞書</a>, <a href=https://github.com/code4fukui/CEdic>CE典</a><br>
+app: MIT <a href=https://github.com/code4fukui/dpc-words>src on GitHub</a> (<a href=https://fukuno.jig.jp/4325>blog 一日一創</a>)<br>
 </footer>
 
 
@@ -30,40 +30,26 @@ import { rnd } from "https://js.sabae.cc/rnd.js";
 
 intext.disabled = true;
 intext.value = "loading...";
-const fn = "ipsj-words-ver.1.0_2024-4-10.csv";
+const fn = "icd.csv";
+const keyname = "ICD名称";
+
 const cache = await IndexedCache.create(fn, 1);
 const bin = await cache.fetchOrLoad(fn);
-const data0 = CSV.parse(new TextDecoder().decode(bin));
+const data = CSV.parse(new TextDecoder().decode(bin));
 
-const data = [];
-for (const d of data0) {
-  //if (!d.説明) continue;
-  if (data.find(i => {
-    if (i.用語 != d.用語) return false;
-    if (i.説明 != d.説明) {
-      //console.log(d.用語, d.説明);
-      console.log(d.用語);
-      return false;
-    }
-    return true;
-  })) continue;
-  data.push(d);
-}
-
-console.log(data);
+console.log(data.length);
 const keys0 = [];
 for (const d of data) {
-  d.用語.split("|").forEach(i => keys0.push(i));
+  d[keyname].split("，").forEach(i => keys0.push(i));
 }
 const keys = keys0.sort((a, b) => b.length - a.length);
 console.log("keys.length", keys, keys.length);
 //data0.filter(i => i.説明);
 //const data2 = ArrayUtil.toUnique(data.map(i => i.用語));
 //console.log(data2.length, "/", data.length, "/", data0.length);
-console.log(data.length, "/", data0.length);
+//console.log(data.length, "/", data0.length);
 //console.log(data);
-data.forEach(i => i.key = (i.用語 + i.説明).toUpperCase());
-
+data.forEach(i => i.key = i[keyname].toUpperCase());
 
 intext.disabled = false;
 intext.value = "";
@@ -116,6 +102,11 @@ const setWithLink = (div, s) => {
 };
 const list2htmlBlock = (div, data) => {
   const tbl = cr("table");
+  const names = [keyname, "MDCコード", "分類コード", "ICDコード"];
+  const tr = cr("tr", tbl);
+  for (const name of names) {
+    cr("th", tr).textContent = name.replace("コード", "");
+  }
   for (const d of data) {
     const set = (td, name) => {
       setWithLink(td, d[name]);
@@ -130,8 +121,23 @@ const list2htmlBlock = (div, data) => {
     const td1 = cr("td", tr);
     td1.className = "means";
     //setWithLink(td1, d.用語.replace(/\|/g, "、"));
-    td1.textContent = d.用語.replace(/\|/g, "、");
-    set(cr("td", tr), "説明");
+    //td1.textContent = d[keyname]; //.replace(/\|/g, "、");
+    const ss = d[keyname].split("，");
+    for (const key of ss) {
+      const a = cr("a");
+      a.textContent = key;
+      const url = "https://ja.wikipedia.org/w/index.php?search=";
+      //const url = "https://ja.wikipedia.org/wiki/";
+      a.setAttribute("href", url + encodeURIComponent(key));
+      td1.appendChild(a);
+      a.style.marginLeft = ".5em";
+    }
+
+    const names = ["MDCコード", "分類コード", "ICDコード"];
+    for (const name of names) {
+      set(cr("td", tr), name);
+    }
+    //set(cr("td", tr), "説明");
     /*
     const tr2 = cr("tr", tbl);
     const tdp = cr("td", tr2);
@@ -166,11 +172,11 @@ intext.oninput = () => {
   */
   const val = (i) => {
     let pnt = 0;
-    const keys = i.用語.split("|");
+    const keys = i[keyname].split("|");
     if (keys.indexOf(key) >= 0) return 0;
-    const n = i.用語.charCodeAt(0) + 100000 * i.用語.length;
-    if (!i.説明) return 100000 * 10000 + n;
-    if (i.用語.indexOf(key) >= 0) return -1 + n;
+    const n = i[keyname].charCodeAt(0) + 100000 * i[keyname].length;
+    //if (!i.説明) return 100000 * 10000 + n;
+    if (i[keyname].indexOf(key) >= 0) return -1 + n;
     return 100000 * 100 + n;
   };
   data2.sort((a, b) => val(a) - val(b));
@@ -188,7 +194,7 @@ intext.oninput = () => {
 };
 
 onhashchange = () => {
-  intext.value = decodeURIComponent(document.location.hash.substring(1)) || "公開鍵";
+  intext.value = decodeURIComponent(document.location.hash.substring(1)) || "胃";
   intext.oninput();
 };
 onhashchange();
