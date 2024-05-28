@@ -2,7 +2,7 @@
 
 ## サンプルアプリ
 
-- [DPC辞書](https://code4fukui.github.io/dpc-words/)
+- [DPCリスト](https://code4fukui.github.io/dpc-words/)
 
 ## 出典
 
