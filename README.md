@@ -1,7 +1,7 @@
 # dpc-words
 
-- [idc.csv](idc.csv) IDC
-- [idc_list.csv](idc_list.csv) 日付付きIDCリスト
+- [icd.csv](icd.csv) ICD
+- [icd_list.csv](icd_list.csv) 日付付きICDリスト
 
 * 毎日更新をチェックし自動更新
 
