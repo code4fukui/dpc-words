@@ -12,7 +12,7 @@ const dom = HTMLParser.parse(html);
 
 const links = dom.querySelectorAll("ul.li-notesB > li");
 //console.log(links);
-const links2 = links.map(i => ({ text: i.text, url: baseurl + i.querySelector("a").getAttribute("href") }));
+const links2 = links.filter(i => i.querySelector("a")).map(i => ({ text: i.text, url: baseurl + i.querySelector("a").getAttribute("href") }));
 //console.log(links2);
 
 const links3 = links2.filter(i => i.text.indexOf("診断群分類（DPC）電子点数表（正式版）") >= 0);
