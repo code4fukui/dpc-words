@@ -1,14 +1,16 @@
 # dpc-words
 
-- [icd.csv](icd.csv) ICD
-- [icd_list.csv](icd_list.csv) 日付付きICDリスト
+This project provides daily updated CSV files for the Diagnosis Procedure Combination (DPC) code list used in the Japanese healthcare system.
 
-* 毎日更新をチェックし自動更新
+## Demo
+[DPC List](https://code4fukui.github.io/dpc-words/)
 
-## サンプルアプリ
+## Features
+- Automatic daily updates for the latest DPC code list
+- Provides both the full DPC code list as well as a CSV with the update history
 
-- [DPCリスト](https://code4fukui.github.io/dpc-words/)
+## Data / API
+The data is sourced from the [DPC Electronic Point Table - Ministry of Health, Labour and Welfare, Japan](https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000198757_00008.html)
 
-## 出典
-
-- [診断群分類（DPC）電子点数表について - 厚生労働省](https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000198757_00008.html)
+## License
+MIT
