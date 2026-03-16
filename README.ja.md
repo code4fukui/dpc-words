@@ -1,15 +1,11 @@
 # dpc-words
 
-DPC(診断群分類)関連のデータをまとめたリポジトリです。ICDコード(国際疾病分類)や日付付きのDPCリストを提供しています。
-
-## サンプルアプリ
-
-- [DPCリスト](https://code4fukui.github.io/dpc-words/)
+DPC (診断群分類) 関連のデータをまとめたリポジトリです。ICD コード (国際疾病分類) や日付付きの DPC リストを提供しています。
 
 ## データ
 
-- [icd.csv](icd.csv) ICD(国際疾病分類)のデータ
-- [icd_list.csv](icd_list.csv) 日付付きのICDリスト
+- [icd.csv](icd.csv) ICD (国際疾病分類) のデータ
+- [icd_list.csv](icd_list.csv) 日付付きの ICD リスト
 
 データは毎日自動で更新されます。
 
